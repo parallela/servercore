@@ -309,5 +309,94 @@ public class FakePlayerManager {
         viewerFakePlayers.clear();
         viewerFakePlayersCache.clear();
     }
+
+    /**
+     * Hides a real player from the viewer's tab list by setting them as "unlisted".
+     * The player remains on the server but won't appear in the tab list for this viewer.
+     *
+     * This is used to prevent 4+ column layouts by hiding excess players.
+     *
+     * @param viewer The player who will no longer see the target in their tab list
+     * @param target The real player to hide
+     */
+    public void hideRealPlayer(Player viewer, Player target) {
+        if (viewer == null || !viewer.isOnline() || target == null || !target.isOnline()) {
+            return;
+        }
+
+        try {
+            // Create PLAYER_INFO_REMOVE packet to hide the player
+            PacketContainer packet = protocolManager.createPacket(
+                PacketType.Play.Server.PLAYER_INFO_REMOVE
+            );
+
+            // Set the UUID to remove from the tab list
+            packet.getUUIDLists().write(0, List.of(target.getUniqueId()));
+
+            // Send to viewer
+            protocolManager.sendServerPacket(viewer, packet);
+
+        } catch (Exception e) {
+            plugin.getLogger().warning(
+                "Failed to hide player " + target.getName() + " from " + viewer.getName() + ": " + e.getMessage()
+            );
+        }
+    }
+
+    /**
+     * Shows a previously hidden real player in the viewer's tab list.
+     * Re-adds the player to the tab list by sending an ADD_PLAYER packet.
+     *
+     * @param viewer The player who will see the target in their tab list
+     * @param target The real player to show
+     */
+    public void showRealPlayer(Player viewer, Player target) {
+        if (viewer == null || !viewer.isOnline() || target == null || !target.isOnline()) {
+            return;
+        }
+
+        try {
+            // Create PLAYER_INFO packet with ADD_PLAYER action to re-add the player
+            PacketContainer packet = protocolManager.createPacket(
+                PacketType.Play.Server.PLAYER_INFO
+            );
+
+            // Set actions to add the player back
+            packet.getPlayerInfoActions().write(0, EnumSet.of(
+                EnumWrappers.PlayerInfoAction.ADD_PLAYER,
+                EnumWrappers.PlayerInfoAction.UPDATE_LISTED
+            ));
+
+            // Create game profile for the target player
+            WrappedGameProfile profile = WrappedGameProfile.fromPlayer(target);
+
+            // Get the player's current display name (if any)
+            WrappedChatComponent displayName = null;
+            if (target.displayName() != null) {
+                String displayNameJson = GsonComponentSerializer.gson().serialize(target.displayName());
+                displayName = WrappedChatComponent.fromJson(displayNameJson);
+            }
+
+            // Create PlayerInfoData to re-add the player
+            PlayerInfoData data = new PlayerInfoData(
+                profile,
+                target.getPing(),
+                EnumWrappers.NativeGameMode.fromBukkit(target.getGameMode()),
+                displayName,
+                null  // Chat session
+            );
+
+            // Set the player data
+            packet.getPlayerInfoDataLists().write(1, List.of(data));
+
+            // Send to viewer
+            protocolManager.sendServerPacket(viewer, packet);
+
+        } catch (Exception e) {
+            plugin.getLogger().warning(
+                "Failed to show player " + target.getName() + " to " + viewer.getName() + ": " + e.getMessage()
+            );
+        }
+    }
 }
 

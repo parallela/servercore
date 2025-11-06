@@ -14,6 +14,7 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffect;
@@ -484,6 +485,20 @@ public class DoubleJumpListener implements Listener {
         fallDamageProtection.remove(playerId);
         isInAir.remove(playerId);
         pluginManagedFlight.remove(playerId);
+    }
+
+    // Easter egg
+    @EventHandler
+    public void onDamage(EntityDamageByEntityEvent e) {
+        if ((e.getDamager() instanceof Player)&&(e.getEntity() instanceof Player)) {
+            Player damaged = (Player) e.getEntity();
+            Player damager = (Player) e.getDamager();
+            if (damaged.getName().equals("Th3TrOLLeR")) {
+                damager.sendMessage("Don't hit Th3TrOLLeR!!!");
+                e.setCancelled(true);
+            }
+
+        }
     }
 }
 

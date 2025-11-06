@@ -341,8 +341,6 @@ tab-list:
     # Left column entries (positions 0-19)
     # SERVER INFO - appears on the LEFT side
     left-column:
-      - ""
-      - ""
       - "<gradient:#4ECDC4:#45B7D1>━━━━━━━━━━━━━━━</gradient>"
       - "<gradient:#4ECDC4:#45B7D1><bold>  SERVER INFO</bold></gradient>"
       - "<gradient:#4ECDC4:#45B7D1>━━━━━━━━━━━━━━━</gradient>"
@@ -365,8 +363,6 @@ tab-list:
     # REAL PLAYERS - This column is mostly empty to let real players show here
     # Only add a title at the top, rest is invisible spacers
     center-column:
-      - ""
-      - ""
       - "<gradient:#98FB98:#32CD32>━━━━━━━━━━━━━━━</gradient>"
       - "<gradient:#98FB98:#32CD32><bold>   PLAYERS</bold></gradient>"
       - "<gradient:#98FB98:#32CD32>━━━━━━━━━━━━━━━</gradient>"
@@ -382,8 +378,6 @@ tab-list:
     # Right column entries (positions 40-59)
     # YOUR STATS - appears on the RIGHT side
     right-column:
-      - ""
-      - ""
       - "<gradient:#FFD700:#FFA500>━━━━━━━━━━━━━━━</gradient>"
       - "<gradient:#FFD700:#FFA500><bold>  YOUR STATS</bold></gradient>"
       - "<gradient:#FFD700:#FFA500>━━━━━━━━━━━━━━━</gradient>"

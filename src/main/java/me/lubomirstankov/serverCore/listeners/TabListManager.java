@@ -61,6 +61,7 @@ public class TabListManager implements Listener {
             if (event.getPlayer().isOnline()) {
                 updateTabList(event.getPlayer());
                 updateFakePlayers(event.getPlayer());
+                hideExcessPlayers(event.getPlayer());
             }
         }, 20L);  // 20 ticks = 1 second delay
     }
@@ -95,6 +96,9 @@ public class TabListManager implements Listener {
 
                     // Update fake players (flicker-free updates)
                     updateFakePlayers(player);
+
+                    // Hide excess players to maintain 3-column layout
+                    hideExcessPlayers(player);
                 }
             }
         };
@@ -529,6 +533,53 @@ public class TabListManager implements Listener {
 
         // Clean up all fake players
         fakePlayerManager.cleanup();
+    }
+
+    /**
+     * Hides excess real players beyond the configured maximum to prevent 4+ column layout.
+     * Uses ProtocolLib to set player list entries to "unlisted" for the viewer.
+     *
+     * This ensures the tab list stays in 3-column mode even with many online players.
+     * The "...and X more" fake player entry shows how many are hidden.
+     *
+     * @param viewer The player viewing the tab list
+     */
+    private void hideExcessPlayers(Player viewer) {
+        ConfigurationSection fakeSection = plugin.getConfig()
+            .getConfigurationSection(CONFIG_PATH + ".fake-players");
+
+        if (fakeSection == null || !fakeSection.getBoolean("enabled", false)) {
+            return;
+        }
+
+        String layout = fakeSection.getString("layout", "auto").toLowerCase();
+        if (!"three-columns".equals(layout)) {
+            return; // Only hide players in three-column mode
+        }
+
+        int maxCenterPlayers = fakeSection.getInt("max-center-players", -1);
+        if (maxCenterPlayers <= 0) {
+            return; // No limit configured
+        }
+
+        // Get all online players sorted alphabetically
+        List<Player> allPlayers = new ArrayList<>(Bukkit.getOnlinePlayers());
+        allPlayers.sort(Comparator.comparing(Player::getName));
+
+        // Hide players beyond the max limit by setting them as "unlisted"
+        for (int i = maxCenterPlayers; i < allPlayers.size(); i++) {
+            Player playerToHide = allPlayers.get(i);
+            if (playerToHide.getUniqueId().equals(viewer.getUniqueId())) {
+                continue; // Never hide the viewer from themselves
+            }
+            fakePlayerManager.hideRealPlayer(viewer, playerToHide);
+        }
+
+        // Show players within the limit
+        for (int i = 0; i < Math.min(maxCenterPlayers, allPlayers.size()); i++) {
+            Player playerToShow = allPlayers.get(i);
+            fakePlayerManager.showRealPlayer(viewer, playerToShow);
+        }
     }
 }
 
