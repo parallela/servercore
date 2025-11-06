@@ -1,0 +1,12 @@
+name: ServerCore
+version: '1.0-SNAPSHOT'
+main: me.lubomirstankov.serverCore.ServerCore
+api-version: '1.21'
+softdepend: [PlaceholderAPI, ProtocolLib]
+
+commands:
+  list:
+    description: Shows the list of online players with beautiful formatting
+    usage: /<command>
+    aliases: [playerlist, online, who]
+

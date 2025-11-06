@@ -1,0 +1,932 @@
+# ✨ ServerCore configuration — welcome messages & tweaks
+# This file defines how join messages behave. Uses Kyori Adventure MiniMessage by default.
+#
+# ════════════════════════════════════════════════════════════════════════════
+# PLACEHOLDERAPI SUPPORT
+# ════════════════════════════════════════════════════════════════════════════
+# This plugin supports PlaceholderAPI! Install PlaceholderAPI to use any PAPI placeholders.
+#
+# Built-in Placeholders (always available):
+#   {player}         - Player's name
+#   {displayname}    - Player's display name
+#   {online}         - Online player count
+#   {max}            - Max player count
+#   {world}          - Player's current world
+#   {tps}            - Server TPS (in tab list)
+#   {ping}           - Player's ping (in tab list)
+#   {uptime}         - Server uptime (in tab list)
+#   {memory_used}    - Used memory in MB (in tab list)
+#   {memory_max}     - Max memory in MB (in tab list)
+#
+# PlaceholderAPI Placeholders (when PlaceholderAPI is installed):
+#   %player_name%           - Player name
+#   %player_health%         - Player health
+#   %player_level%          - Player level
+#   %vault_prefix%          - Player prefix (requires Vault)
+#   %vault_rank%            - Player rank (requires Vault)
+#   %essentials_nickname%   - Essentials nickname
+#   And 1000+ more! See: https://wiki.placeholderapi.com/users/placeholder-list/
+#
+# Example with PlaceholderAPI:
+#   message: "<gold>%player_name%</gold> [Level %player_level%] joined!"
+# ════════════════════════════════════════════════════════════════════════════
+# Example MiniMessage: <green>Welcome <gold>{player}</gold> to the server!</green>
+
+join-message:
+  # Enable or disable sending a join message
+  enabled: true
+
+  # The actual message to send. Use MiniMessage tags or plain text.
+  # Keep the placeholder {player} where you want the player's name inserted.
+  # RGB hex colors: #FF6B6B (coral red), #4ECDC4 (turquoise), #45B7D1 (sky blue), #FFA07A (light salmon)
+  message: "<gradient:#FFD700:#FF6B6B:#FF1493><bold>★</bold></gradient> <gradient:#4ECDC4:#45B7D1:#9B59B6>{player}</gradient> <gradient:#98FB98:#32CD32:#228B22>has joined the server!</gradient> <gradient:#FFD700:#FF6B6B:#FF1493><bold>★</bold></gradient>"
+
+  # Sound settings for join event
+  sound:
+    # Enable or disable join sound for all players
+    enabled: true
+    # Sound to play (Bukkit Sound enum name)
+    type: "ENTITY_PLAYER_LEVELUP"
+    # Volume (0.0 - 1.0)
+    volume: 0.75
+    # Pitch (0.5 - 2.0)
+    pitch: 1.0
+
+  # Per-player cooldown (seconds) to avoid spam when reconnecting rapidly
+  cooldown-seconds: 5
+
+  # Per-world join messages - if player joins in one of these worlds, use the specific message
+  per-world:
+    # Nether world example
+    world_nether:
+      enabled: true
+      message: "<gradient:#FF4500:#8B0000>🔥 {player} has entered the fiery depths of the Nether! 🔥</gradient>"
+      sound:
+        enabled: true
+        type: "ENTITY_BLAZE_AMBIENT"
+        volume: 0.6
+        pitch: 0.8
+    # End world example
+    world_the_end:
+      enabled: true
+      message: "<gradient:#9B59B6:#2C3E50>✨ {player} has ventured into the mysterious End! ✨</gradient>"
+      sound:
+        enabled: true
+        type: "ENTITY_ENDER_DRAGON_AMBIENT"
+        volume: 0.5
+        pitch: 1.2
+    # Custom world example
+    lobby:
+      enabled: true
+      message: "<gradient:#00FF00:#00AA00>→ {player} joined the lobby</gradient>"
+      sound:
+        enabled: false
+
+# Inventory lock feature - prevents players from modifying their inventory
+inventory-lock:
+  # Enable or disable inventory locking
+  enabled: true
+  # Cancel inventory click events
+  prevent-click: true
+  # Cancel item drop events
+  prevent-drop: true
+  # Cancel item pickup events
+  prevent-pickup: true
+  # Players with this permission can bypass inventory lock (e.g., servercore.inventory.bypass)
+  bypass-permission: "servercore.inventory.bypass"
+
+# Double-jump boost feature
+double-jump:
+  # Enable or disable double-jump boost
+  enabled: true
+  # Boost strength (velocity multiplier)
+  boost-strength: 1.5
+  # Upward boost strength
+  boost-upward: 0.5
+  # Cooldown in milliseconds between double jumps
+  cooldown-ms: 3000
+
+  # Visual & Audio Effects (you can enable multiple at once)
+  effects:
+    # Spawn fireworks on double jump
+    fireworks:
+      enabled: true
+      # Number of fireworks to spawn
+      count: 3
+      # Firework colors (RGB hex format)
+      colors:
+        - "#FF6B6B"
+        - "#4ECDC4"
+        - "#FFD700"
+      # Firework effects (BALL, BALL_LARGE, STAR, BURST, CREEPER)
+      type: "BALL_LARGE"
+
+    # Particle effects on double jump
+    particles:
+      enabled: true
+      # Particle type (FLAME, CLOUD, EXPLOSION_NORMAL, FIREWORKS_SPARK, etc.)
+      type: "FIREWORKS_SPARK"
+      # Number of particles to spawn
+      count: 30
+      # Spread radius
+      spread: 0.5
+      # Particle speed
+      speed: 0.1
+
+    # Potion effects applied on double jump
+    potion-effects:
+      enabled: false
+      # List of potion effects to apply
+      effects:
+        - type: "SPEED"
+          duration: 40  # Duration in ticks (20 ticks = 1 second)
+          amplifier: 1  # Effect level (0 = level I, 1 = level II, etc.)
+        - type: "JUMP"
+          duration: 40
+          amplifier: 0
+
+    # Action bar message on double jump
+    action-bar:
+      enabled: true
+      message: "<gradient:#FFD700:#FF6B6B>Double Jump! ⚡</gradient>"
+
+    # Title message on double jump
+    title:
+      enabled: false
+      title: "<gradient:#FFD700:#FF6B6B>BOOST!</gradient>"
+      subtitle: "<gray>Double jump activated</gray>"
+      fade-in: 5    # Ticks
+      stay: 15      # Ticks
+      fade-out: 10  # Ticks
+
+    # Sound effect on double jump
+    sound:
+      enabled: true
+      type: "ENTITY_FIREWORK_ROCKET_LAUNCH"
+      volume: 0.8
+      pitch: 1.2
+
+  # Players with this permission can use double jump
+  # Set to empty string ("") to allow everyone without permission check
+  permission: ""
+
+# ═══════════════════════════════════════════════════════════════════════════
+# COMMANDS CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════
+
+commands:
+  # /list command - Shows online players with beautiful formatting
+  list:
+    enabled: true
+    permission: ""  # Leave empty for no permission requirement
+
+    # Message shown when player doesn't have permission
+    no-permission-message: "<gradient:#FF6B6B:#FF1493>You don't have permission to use this command!</gradient>"
+
+    format:
+      # Header - shown at the top (supports multiple lines)
+      header:
+        - ""
+        - "<gradient:#00D4FF:#0099FF:#0066FF>╔═══════════════════════════╗</gradient>"
+        - "<gradient:#FFD700:#FFA500> ✦ Online Players ✦</gradient> <gray>[<green>{online}</green>/<gold>{max}</gold>]</gray>"
+        - "<gradient:#00D4FF:#0099FF:#0066FF>╠═══════════════════════════╣</gradient>"
+        - ""
+
+      # Format for each player line
+      # Placeholders: {player}, {displayname}, {world}, {gamemode}
+      player-format: "  <gradient:#4ECDC4:#45B7D1>▸</gradient> <white>{player}</white> <dark_gray>•</dark_gray> <gray>{world}</gray>"
+
+      # Message shown when no players are online
+      empty-message: "<gray><italic>No players are currently online</italic></gray>"
+
+      # Footer - shown at the bottom (supports multiple lines)
+      footer:
+        - ""
+        - "<gradient:#00D4FF:#0099FF:#0066FF>╚═══════════════════════════╝</gradient>"
+        - ""
+
+# ═══════════════════════════════════════════════════════════════════════════
+# MOTD (MESSAGE OF THE DAY) CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════
+
+motd:
+  # Player MOTD - Shown when a player joins the server
+  player:
+    enabled: true
+    # Delay before showing MOTD (in ticks, 20 ticks = 1 second)
+    delay-ticks: 40
+
+    # Multi-line MOTD with beautiful formatting
+    # Placeholders: {player}, {displayname}, {world}, {online}, {max}
+    lines:
+      - ""
+      - "<gradient:#FFD700:#FF6B6B:#FF1493>╔══════════════════════════════╗</gradient>"
+      - "<gradient:#4ECDC4:#45B7D1:#9B59B6>  Welcome back, <gold>{player}</gold>!</gradient>"
+      - "<gradient:#FFD700:#FF6B6B:#FF1493>╠══════════════════════════════╣</gradient>"
+      - ""
+      - "  <gradient:#98FB98:#32CD32>✦</gradient> <gray>Players Online:</gray> <green>{online}</green><dark_gray>/</dark_gray><gold>{max}</gold>"
+      - "  <gradient:#FFD700:#FFA500>✦</gradient> <gray>Your World:</gray> <aqua>{world}</aqua>"
+      - "  <gradient:#FF69B4:#FF1493>✦</gradient> <gray>Status:</gray> <green>All systems operational</green>"
+      - ""
+      - "  <gradient:#4ECDC4:#9B59B6><italic>Have a great time!</italic></gradient>"
+      - ""
+      - "<gradient:#FFD700:#FF6B6B:#FF1493>╚══════════════════════════════╝</gradient>"
+      - ""
+
+  # Server MOTD - Shown in the server list
+  server:
+    enabled: true
+
+    # Custom max players shown in server list (-1 to use actual max)
+    custom-max-players: -1
+
+    # MOTD lines (max 2 lines for server list)
+    # Placeholders: {online}, {max}, {server}, {version}
+    motd-lines:
+      - "<gradient:#FFD700:#FF6B6B:#FF1493>✧</gradient> <gradient:#4ECDC4:#45B7D1:#9B59B6><bold>ServerCore</bold></gradient> <gradient:#FFD700:#FF6B6B:#FF1493>✧</gradient> <gray>1.21 Survival</gray>"
+      - "<gradient:#98FB98:#32CD32>▸</gradient> <white>Join now!</white> <dark_gray>•</dark_gray> <gray>Players:</gray> <green>{online}</green><dark_gray>/</dark_gray><gold>{max}</gold>"
+
+    # Player hover configuration (shows when hovering over player count)
+    player-hover:
+      enabled: true
+
+      # Lines to show on hover (shorter lines to fit Minecraft's hover width)
+      # Placeholders: {online}, {max}, {server}, {version}
+      # Note: Keep lines under 30 characters for best display
+      lines:
+        - "§8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+        - "§6§l⚡ ServerCore"
+        - ""
+        - "§7Online:"
+        - "§a{online} §7/ §e{max}"
+        - ""
+        - "§b✦ §fSurvival"
+        - "§d✦ §fCreative"
+        - "§e✦ §fMiniGames"
+        - ""
+        - "§aClick to join!"
+        - "§8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TAB LIST (PLAYER LIST) CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════
+
+tab-list:
+  # Enable or disable custom tab list
+  enabled: true
+
+  # Update interval in ticks (20 ticks = 1 second)
+  # Lower values = more frequent updates (may impact performance)
+  # Recommended: 20-40 ticks
+  update-interval-ticks: 20
+
+  # Header - shown above the player list
+  # Placeholders:
+  #   {player}       - Player's name
+  #   {displayname}  - Player's display name
+  #   {online}       - Online player count
+  #   {max}          - Max player count
+  #   {world}        - Player's current world
+  #   {tps}          - Server TPS (Ticks Per Second)
+  #   {tps_color}    - Auto color based on TPS (<green>, <yellow>, <red>)
+  #   {ping}         - Player's ping in milliseconds
+  #   {uptime}       - Server uptime (e.g., "2d 5h" or "3h 25m")
+  #   {memory_used}  - Used memory in MB
+  #   {memory_max}   - Max memory in MB
+  #   {server}       - Server name
+  #   {version}      - Minecraft version
+  header:
+    - ""
+    - "<gradient:#FFD700:#FF6B6B:#FF1493>✧═══════════════════✧</gradient>"
+    - "<gradient:#4ECDC4:#45B7D1:#9B59B6><bold>ServerCore Network</bold></gradient>"
+    - "<gradient:#FFD700:#FF6B6B:#FF1493>✧═══════════════════✧</gradient>"
+    - ""
+
+  # Footer - shown below the player list
+  footer:
+    - ""
+    - "<gradient:#98FB98:#32CD32>✦ play.servercore.net ✦</gradient>"
+    - ""
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # FAKE PLAYERS - Custom entries in the player tab list
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Each line below creates a fake player entry that appears in the tab list!
+  # Great for displaying server stats, information, or decorations.
+  #
+  # Features:
+  # ✓ Supports all placeholders ({player}, {online}, {tps}, {ping}, etc.)
+  # ✓ Supports PlaceholderAPI placeholders (%player_health%, etc.)
+  # ✓ Full MiniMessage formatting (gradients, colors, etc.)
+  # ✓ Updates dynamically based on update-interval-ticks
+  # ✓ Visible to all online players
+  # ✓ Column-based positioning (left, right, or auto)
+  #
+  # Tips:
+  # - Each line = one fake player entry in the tab list
+  # - Empty lines ("") create spacing/separation
+  # - Use columns to organize content (server info left, player info right)
+  # - Tab list shows 20 entries per column (1-20 = left, 21-40 = right, etc.)
+  # ═══════════════════════════════════════════════════════════════════════════
+  fake-players:
+    # Enable or disable fake players in the tab list
+    enabled: true
+
+    # Column layout mode:
+    # - "auto": All fake players in one list (traditional, sorts at bottom)
+    # - "columns": Use left-column and right-column sections (2 columns)
+    # - "three-columns": Use left-column, center-column, and right-column (3 columns)
+    layout: "three-columns"
+
+    # Left column entries (positions 0-19)
+    # SERVER INFO - appears on the LEFT side
+    left-column:
+      - ""
+      - ""
+      - "<gradient:#4ECDC4:#45B7D1>━━━━━━━━━━━━━━━</gradient>"
+      - "<gradient:#4ECDC4:#45B7D1><bold>  SERVER INFO</bold></gradient>"
+      - "<gradient:#4ECDC4:#45B7D1>━━━━━━━━━━━━━━━</gradient>"
+      - ""
+      - "<gray>Players:</gray>"
+      - "<green>{online}<dark_gray>/<gold>{max}</gold>"
+      - ""
+      - "<gray>TPS:</gray>"
+      - "{tps_color}{tps}"
+      - ""
+      - "<gray>Uptime:</gray>"
+      - "<yellow>{uptime}</yellow>"
+      - ""
+      - "<gray>Memory:</gray>"
+      - "<light_purple>{memory_used}<dark_gray>/<light_purple>{memory_max}MB</light_purple>"
+      - ""
+      - ""
+
+    # Center column entries (positions 20-39)
+    # REAL PLAYERS - This column is mostly empty to let real players show here
+    # Only add a title at the top, rest is invisible spacers
+    center-column:
+      - ""
+      - ""
+      - "<gradient:#98FB98:#32CD32>━━━━━━━━━━━━━━━</gradient>"
+      - "<gradient:#98FB98:#32CD32><bold>   PLAYERS</bold></gradient>"
+      - "<gradient:#98FB98:#32CD32>━━━━━━━━━━━━━━━</gradient>"
+      - ""
+      # The rest will be invisible spacers (empty display names)
+      # Real players will appear below this title in the center column
+
+    # Maximum players to show in center column before showing "...and X more"
+    # Set to -1 to show all players (no limit)
+    # Recommended: 10-12 for clean display
+    max-center-players: 10
+
+    # Right column entries (positions 40-59)
+    # YOUR STATS - appears on the RIGHT side
+    right-column:
+      - ""
+      - ""
+      - "<gradient:#FFD700:#FFA500>━━━━━━━━━━━━━━━</gradient>"
+      - "<gradient:#FFD700:#FFA500><bold>  YOUR STATS</bold></gradient>"
+      - "<gradient:#FFD700:#FFA500>━━━━━━━━━━━━━━━</gradient>"
+      - ""
+      - "<gray>Name:</gray>"
+      - "<white>{player}</white>"
+      - ""
+      - "<gray>World:</gray>"
+      - "<aqua>{world}</aqua>"
+      - ""
+      - "<gray>Ping:</gray>"
+      - "<green>{ping}ms</green>"
+      - ""
+      - ""
+      - "<gradient:#4ECDC4:#9B59B6>Welcome!</gradient>"
+      - ""
+      - ""
+
+    # Legacy single-column mode (used when layout: "auto")
+    # All entries appear at the bottom of the list
+    players:
+      - ""
+      - "<gradient:#4ECDC4:#45B7D1>━━━ SERVER INFO ━━━</gradient>"
+      - "<gray>Players: <green>{online}<dark_gray>/<gold>{max}</gold></gray>"
+      - "<gray>TPS: {tps_color}{tps}</gray>"
+      - ""
+
+# ═══════════════════════════════════════════════════════════════════════════
+# CREATIVE TAB LIST EXAMPLES (Copy and paste these into the tab-list section)
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Example 1: Minimal & Clean
+# tab-list:
+#   enabled: true
+#   update-interval-ticks: 40
+#   header:
+#     - ""
+#     - "<gradient:#00D4FF:#0099FF><bold>ServerCore</bold></gradient>"
+#     - "<gray>{online}/{max} Players</gray>"
+#     - ""
+#   footer:
+#     - ""
+#     - "<gray>TPS: {tps_color}{tps}</gray>"
+#     - ""
+
+# Example 2: Full Information Dashboard
+# tab-list:
+#   enabled: true
+#   update-interval-ticks: 20
+#   header:
+#     - ""
+#     - "<gradient:#FFD700:#FFA500>╔════════════════════╗</gradient>"
+#     - "<gradient:#4ECDC4:#9B59B6><bold>  SERVER STATUS  </bold></gradient>"
+#     - "<gradient:#FFD700:#FFA500>╠════════════════════╣</gradient>"
+#     - ""
+#     - "<gray>▸ Players: <green>{online}</green>/<gold>{max}</gold></gray>"
+#     - "<gray>▸ TPS: {tps_color}{tps}</gray>"
+#     - "<gray>▸ Your Ping: <aqua>{ping}ms</aqua></gray>"
+#     - "<gray>▸ Uptime: <yellow>{uptime}</yellow></gray>"
+#     - ""
+#   footer:
+#     - ""
+#     - "<gradient:#FF6B6B:#FF1493>╠════════════════════╣</gradient>"
+#     - "<gray>World: <aqua>{world}</aqua></gray>"
+#     - "<gray>Memory: <light_purple>{memory_used}/{memory_max}MB</light_purple></gray>"
+#     - "<gradient:#FFD700:#FFA500>╚════════════════════╝</gradient>"
+#     - ""
+
+# Example 3: Rainbow Style
+# tab-list:
+#   enabled: true
+#   update-interval-ticks: 20
+#   header:
+#     - ""
+#     - "<rainbow>════════════════════</rainbow>"
+#     - "<rainbow><bold>ServerCore Network</bold></rainbow>"
+#     - "<rainbow>════════════════════</rainbow>"
+#     - ""
+#     - "<gradient:#FF0000:#FF7F00:#FFFF00:#00FF00:#0000FF:#8B00FF>Players: {online}/{max}</gradient>"
+#     - ""
+#   footer:
+#     - ""
+#     - "<gradient:#FF0000:#FF7F00:#FFFF00:#00FF00:#0000FF:#8B00FF>TPS: {tps} • Ping: {ping}ms</gradient>"
+#     - "<rainbow>play.example.net</rainbow>"
+#     - ""
+
+# Example 4: Simple Elegant
+# tab-list:
+#   enabled: true
+#   update-interval-ticks: 40
+#   header:
+#     - ""
+#     - "<white>━━━━━━━━━━━━━━━━━━━</white>"
+#     - "<gradient:#FFD700:#FFA500>ServerCore</gradient>"
+#     - "<white>━━━━━━━━━━━━━━━━━━━</white>"
+#     - ""
+#   footer:
+#     - ""
+#     - "<gray><online}/{max} Online</gray>"
+#     - ""
+
+# Example 5: Competitive/PvP Style
+# tab-list:
+#   enabled: true
+#   update-interval-ticks: 20
+#   header:
+#     - ""
+#     - "<red><bold>⚔</bold></red> <gradient:#FF0000:#8B0000><bold>PvP Arena</bold></gradient> <red><bold>⚔</bold></red>"
+#     - ""
+#     - "<gray>Players: <red>{online}</red>/<gold>{max}</gold></gray>"
+#     - "<gray>TPS: {tps_color}{tps}</gray> <dark_gray>|</dark_gray> <gray>Ping: <aqua>{ping}ms</aqua></gray>"
+#     - ""
+#   footer:
+#     - ""
+#     - "<gradient:#FFD700:#FFA500>⚡ Low Latency ⚡</gradient>"
+#     - "<gray>Server: <green>Optimal</green></gray>"
+#     - ""
+
+# Example 6: Community Style
+# tab-list:
+#   enabled: true
+#   update-interval-ticks: 30
+#   header:
+#     - ""
+#     - "<gradient:#4ECDC4:#45B7D1>✦ ✦ ✦ ✦ ✦ ✦ ✦</gradient>"
+#     - "<gradient:#FFD700:#FFA500><bold>Community Server</bold></gradient>"
+#     - "<gradient:#4ECDC4:#45B7D1>✦ ✦ ✦ ✦ ✦ ✦ ✦</gradient>"
+#     - ""
+#     - "<white>Welcome, <gold>{player}</gold>!</white>"
+#     - "<gray>Online: <green>{online}</green>/<gold>{max}</gold></gray>"
+#     - ""
+#   footer:
+#     - ""
+#     - "<aqua>Your World: {world}</aqua>"
+#     - "<gradient:#98FB98:#32CD32>Have fun playing!</gradient>"
+#     - ""
+
+# Example 7: Technical/Server Admin Style
+# tab-list:
+#   enabled: true
+#   update-interval-ticks: 10  # Fast updates for monitoring
+#   header:
+#     - ""
+#     - "<dark_gray>[<gray>Server Monitor<dark_gray>]</gray>"
+#     - ""
+#     - "<gray>Players: <white>{online}/{max}</white></gray>"
+#     - "<gray>TPS: {tps_color}{tps}</gray>"
+#     - "<gray>RAM: <yellow>{memory_used}</yellow>/<yellow>{memory_max}MB</yellow></gray>"
+#     - "<gray>Uptime: <aqua>{uptime}</aqua></gray>"
+#     - ""
+#   footer:
+#     - ""
+#     - "<gray>Your Ping: <green>{ping}ms</green></gray>"
+#     - "<gray>World: <white>{world}</white></gray>"
+#     - ""
+
+# Example 8: Survival Theme
+# tab-list:
+#   enabled: true
+#   update-interval-ticks: 30
+#   header:
+#     - ""
+#     - "<gradient:#228B22:#98FB98>🌲 Survival World 🌲</gradient>"
+#     - ""
+#     - "<gray>Survivors: <green>{online}</green>/<gold>{max}</gold></gray>"
+#     - "<gray>Server: {tps_color}{tps} TPS</gray>"
+#     - ""
+#   footer:
+#     - ""
+#     - "<yellow>⛏ Keep Mining! ⛏</yellow>"
+#     - "<gray>Uptime: {uptime}</gray>"
+#     - ""
+
+# ═══════════════════════════════════════════════════════════════════════════
+# FAKE PLAYERS EXAMPLES
+# ═══════════════════════════════════════════════════════════════════════════
+# Copy and paste these into the fake-players section above!
+
+# ┌─────────────────────────────────────────────────────────────────────────┐
+# │ THREE-COLUMN LAYOUTS (Left + Center + Right) ⭐ RECOMMENDED             │
+# └─────────────────────────────────────────────────────────────────────────┘
+
+# Example 1: Complete 3-Column Layout (Current Default)
+# fake-players:
+#   enabled: true
+#   layout: "three-columns"
+#   left-column:
+#     - ""
+#     - ""
+#     - "<gradient:#4ECDC4:#45B7D1>━━━━━━━━━━━━━━━</gradient>"
+#     - "<gradient:#4ECDC4:#45B7D1><bold>  SERVER INFO</bold></gradient>"
+#     - "<gradient:#4ECDC4:#45B7D1>━━━━━━━━━━━━━━━</gradient>"
+#     - ""
+#     - "<gray>Players:</gray>"
+#     - "<green>{online}<dark_gray>/<gold>{max}</gold>"
+#     - ""
+#     - "<gray>TPS:</gray>"
+#     - "{tps_color}{tps}"
+#     - ""
+#     - "<gray>Uptime:</gray>"
+#     - "<yellow>{uptime}</yellow>"
+#     - ""
+#     - "<gray>Memory:</gray>"
+#     - "<light_purple>{memory_used}<dark_gray>/<light_purple>{memory_max}MB</light_purple>"
+#     - ""
+#     - ""
+#   center-column:
+#     - ""
+#     - ""
+#     - "<gradient:#98FB98:#32CD32>━━━━━━━━━━━━━━━</gradient>"
+#     - "<gradient:#98FB98:#32CD32><bold>   PLAYERS</bold></gradient>"
+#     - "<gradient:#98FB98:#32CD32>━━━━━━━━━━━━━━━</gradient>"
+#     - ""
+#   right-column:
+#     - ""
+#     - ""
+#     - "<gradient:#FFD700:#FFA500>━━━━━━━━━━━━━━━</gradient>"
+#     - "<gradient:#FFD700:#FFA500><bold>  YOUR STATS</bold></gradient>"
+#     - "<gradient:#FFD700:#FFA500>━━━━━━━━━━━━━━━</gradient>"
+#     - ""
+#     - "<gray>Name:</gray>"
+#     - "<white>{player}</white>"
+#     - ""
+#     - "<gray>World:</gray>"
+#     - "<aqua>{world}</aqua>"
+#     - ""
+#     - "<gray>Ping:</gray>"
+#     - "<green>{ping}ms</green>"
+#     - ""
+
+# Example 2: Compact 3-Column Layout
+# fake-players:
+#   enabled: true
+#   layout: "three-columns"
+#   left-column:
+#     - ""
+#     - "<gold>SERVER</gold>"
+#     - "Players: {online}/{max}"
+#     - "TPS: {tps_color}{tps}"
+#     - "Memory: {memory_used}MB"
+#     - ""
+#   center-column:
+#     - ""
+#     - "<green>ONLINE</green>"
+#     - ""
+#   right-column:
+#     - ""
+#     - "<aqua>YOU</aqua>"
+#     - "{player}"
+#     - "World: {world}"
+#     - "Ping: {ping}ms"
+#     - ""
+
+# ┌─────────────────────────────────────────────────────────────────────────┐
+# │ TWO-COLUMN LAYOUTS (Left + Right Positioning)                          │
+# └─────────────────────────────────────────────────────────────────────────┘
+
+# Example 3: Server Info Left, Player Info Right
+# fake-players:
+#   enabled: true
+#   layout: "columns"
+#   left-column:
+#     - ""
+#     - "<gradient:#4ECDC4:#45B7D1>━━━ SERVER INFO ━━━</gradient>"
+#     - "<gray>Players: <green>{online}<dark_gray>/<gold>{max}</gold></gray>"
+#     - "<gray>TPS: {tps_color}{tps}</gray>"
+#     - "<gray>Uptime: <yellow>{uptime}</yellow></gray>"
+#     - ""
+#   right-column:
+#     - ""
+#     - "<gradient:#FFD700:#FFA500>━━━ YOUR STATS ━━━</gradient>"
+#     - "<gray>Name: <white>{player}</white></gray>"
+#     - "<gray>World: <aqua>{world}</aqua></gray>"
+#     - "<gray>Ping: <green>{ping}ms</green></gray>"
+#     - ""
+
+# Example 2: Bordered Dashboard with Split Layout
+# fake-players:
+#   enabled: true
+#   layout: "columns"
+#   left-column:
+#     - ""
+#     - "<dark_gray>╔═══════════════╗</dark_gray>"
+#     - "<gold>   Server</gold>"
+#     - "<dark_gray>╠═══════════════╣</dark_gray>"
+#     - "<gray>TPS: {tps_color}{tps}</gray>"
+#     - "<gray>RAM: {memory_used}MB</gray>"
+#     - "<gray>Uptime: {uptime}</gray>"
+#     - "<dark_gray>╚═══════════════╝</dark_gray>"
+#     - ""
+#   right-column:
+#     - ""
+#     - "<dark_gray>╔═══════════════╗</dark_gray>"
+#     - "<aqua>   Player</aqua>"
+#     - "<dark_gray>╠═══════════════╣</dark_gray>"
+#     - "<gray>{player}</gray>"
+#     - "<gray>World: {world}</gray>"
+#     - "<gray>Ping: {ping}ms</gray>"
+#     - "<dark_gray>╚═══════════════╝</dark_gray>"
+#     - ""
+
+# Example 3: Minimal Split (Clean Design)
+# fake-players:
+#   enabled: true
+#   layout: "columns"
+#   left-column:
+#     - ""
+#     - "<gradient:#FFD700:#FFA500>SERVER</gradient>"
+#     - "<gray>{online} Online</gray>"
+#     - "<gray>TPS: {tps_color}{tps}</gray>"
+#     - ""
+#   right-column:
+#     - ""
+#     - "<gradient:#4ECDC4:#45B7D1>YOU</gradient>"
+#     - "<gray>{player}</gray>"
+#     - "<gray>Ping: {ping}ms</gray>"
+#     - ""
+
+# Example 4: RPG Style Split (with PlaceholderAPI)
+# fake-players:
+#   enabled: true
+#   layout: "columns"
+#   left-column:
+#     - ""
+#     - "<gradient:#FF0000:#8B0000>⚔ COMBAT ⚔</gradient>"
+#     - ""
+#     - "<red>❤ HP: %player_health%</red>"
+#     - "<yellow>⚡ LVL: %player_level%</yellow>"
+#     - "<green>⭐ XP: %player_exp%</green>"
+#     - ""
+#   right-column:
+#     - ""
+#     - "<gradient:#FFD700:#FFA500>💰 ECONOMY 💰</gradient>"
+#     - ""
+#     - "<gold>Balance:</gold>"
+#     - "<gold>$%vault_eco_balance%</gold>"
+#     - ""
+#     - "<gray>Rank: %vault_rank%</gray>"
+#     - ""
+
+# Example 5: Network Stats Left, Personal Stats Right
+# fake-players:
+#   enabled: true
+#   layout: "columns"
+#   left-column:
+#     - ""
+#     - "<gradient:#00FF00:#00AA00>NETWORK</gradient>"
+#     - "<gray>Players: {online}/{max}</gray>"
+#     - "<gray>TPS: {tps_color}{tps}</gray>"
+#     - "<gray>Memory: {memory_used}MB</gray>"
+#     - "<gray>Uptime: {uptime}</gray>"
+#     - ""
+#   right-column:
+#     - ""
+#     - "<gradient:#FF69B4:#FF1493>PROFILE</gradient>"
+#     - "<gray>Name: {player}</gray>"
+#     - "<gray>World: {world}</gray>"
+#     - "<gray>Ping: {ping}ms</gray>"
+#     - ""
+#     - "<white>Welcome!</white>"
+#     - ""
+
+# ┌─────────────────────────────────────────────────────────────────────────┐
+# │ SINGLE-COLUMN LAYOUTS (Traditional Mode)                               │
+# └─────────────────────────────────────────────────────────────────────────┘
+
+# Example 6: Minimal Server Stats (Single Column)
+# fake-players:
+#   enabled: true
+#   players:
+#     - ""
+#     - "<gradient:#FFD700:#FFA500>Server Stats</gradient>"
+#     - "<gray>TPS: {tps_color}{tps}</gray>"
+#     - "<gray>Players: {online}/{max}</gray>"
+#     - ""
+
+# fake-players:
+#   enabled: true
+#   layout: "auto"
+#   players:
+#     - ""
+#     - "<gradient:#FFD700:#FFA500>Server Stats</gradient>"
+#     - "<gray>TPS: {tps_color}{tps}</gray>"
+#     - "<gray>Players: {online}/{max}</gray>"
+#     - ""
+
+# Example 7: Bordered Dashboard (Single Column)
+# fake-players:
+#   enabled: true
+#   layout: "auto"
+#   players:
+#     - ""
+#     - "<dark_gray>╔══════════════╗</dark_gray>"
+#     - "<gradient:#FFD700:#FFA500>  Server Info</gradient>"
+#     - "<dark_gray>╠══════════════╣</dark_gray>"
+#     - "<gray>TPS: {tps_color}{tps}</gray>"
+#     - "<gray>Players: {online}/{max}</gray>"
+#     - "<gray>RAM: {memory_used}MB</gray>"
+#     - "<gray>Uptime: {uptime}</gray>"
+#     - "<dark_gray>╚══════════════╝</dark_gray>"
+#     - ""
+
+# Example 8: Clean & Minimal (Single Column)
+# fake-players:
+#   enabled: true
+#   layout: "auto"
+#   players:
+#     - ""
+#     - "<white>{online}/{max} Online</white>"
+#     - "<gray>TPS: {tps_color}{tps}</gray>"
+#     - ""
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 💡 TIPS FOR COLUMN LAYOUTS
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# How Tab List Columns Work:
+# - 1-20 entries: Single column (left side)
+# - 21-40 entries: Two columns (left + right)
+# - 41-60 entries: Three columns (left + middle + right)
+# - 61-80 entries: Four columns
+#
+# Column Layout Mode:
+# - Use "columns" mode to position content in left and right columns
+# - The plugin automatically adds invisible spacers to reach position 20
+# - Left column = positions 0-19, Right column = positions 20-39
+#
+# Benefits of Column Layout:
+# ✓ Organize information visually
+# ✓ Server stats on left, player stats on right
+# ✓ Cleaner appearance with separated sections
+# ✓ Better use of available space
+#
+# Auto Layout Mode:
+# - Use "auto" mode for traditional single-list approach
+# - All fake players appear at the bottom of the tab list
+# - Simpler but less organized
+# ═══════════════════════════════════════════════════════════════════════════
+#     - ""
+#     - "<blue>💬 Discord:</aqua>"
+#     - "<gray>discord.gg/example</gray>"
+#     - ""
+#     - "<red>📺 YouTube:</aqua>"
+#     - "<gray>youtube.com/example</gray>"
+#     - ""
+
+# Example 5: Leaderboard
+# fake-players:
+#   enabled: true
+#   players:
+#     - "<gradient:#FFD700:#FF6B6B>╔═══════════════╗</gradient>"
+#     - "<gold><bold>🏆 Top Players 🏆</bold></gold>"
+#     - "<gradient:#FFD700:#FF6B6B>╠═══════════════╣</gradient>"
+#     - ""
+#     - "<yellow>1. %statistic_top_1_name%</yellow>"
+#     - "<gray>   Kills: %statistic_top_1_kills%</gray>"
+#     - ""
+#     - "<gray>2. %statistic_top_2_name%</gray>"
+#     - "<gray>   Kills: %statistic_top_2_kills%</gray>"
+#     - ""
+#     - "<gray>3. %statistic_top_3_name%</gray>"
+#     - "<gray>   Kills: %statistic_top_3_kills%</gray>"
+#     - ""
+
+# Example 6: Minimal Clean Info
+# fake-players:
+#   enabled: true
+#   players:
+#     - "<white>━━━━━━━━━━━━━━</white>"
+#     - "<gradient:#00D4FF:#0099FF>ServerCore</gradient>"
+#     - "<white>━━━━━━━━━━━━━━</white>"
+#     - ""
+#     - "<gray>Online: <green>{online}</green></gray>"
+#     - "<gray>TPS: {tps_color}{tps}</gray>"
+#     - ""
+
+# Example 7: Event Announcement
+# fake-players:
+#   enabled: true
+#   players:
+#     - "<gradient:#FF1493:#FFD700>🎉 EVENT ACTIVE 🎉</gradient>"
+#     - ""
+#     - "<white>Double XP Weekend!</white>"
+#     - "<gray>Ends in: <yellow>2h 30m</yellow></gray>"
+#     - ""
+#     - "<gradient:#98FB98:#32CD32>Join now!</gradient>"
+#     - ""
+
+# Example 8: Server Rules
+# fake-players:
+#   enabled: true
+#   players:
+#     - "<red>━━━━━━━━━━━━━━</red>"
+#     - "<white><bold>Server Rules</bold></white>"
+#     - "<red>━━━━━━━━━━━━━━</red>"
+#     - ""
+#     - "<gray>1. No griefing</gray>"
+#     - "<gray>2. Be respectful</gray>"
+#     - "<gray>3. No hacking</gray>"
+#     - "<gray>4. Have fun!</gray>"
+#     - ""
+
+# Example 9: Store Advertisement
+# fake-players:
+#   enabled: true
+#   players:
+#     - "<gradient:#FFD700:#FFA500>╔═══════════════╗</gradient>"
+#     - "<gold><bold>💎 VIP RANKS 💎</bold></gold>"
+#     - "<gradient:#FFD700:#FFA500>╠═══════════════╣</gradient>"
+#     - ""
+#     - "<yellow>✦ VIP - $5/mo</yellow>"
+#     - "<gold>✦ VIP+ - $10/mo</gold>"
+#     - "<aqua>✦ MVP - $20/mo</aqua>"
+#     - ""
+#     - "<gray>store.example.net</gray>"
+#     - ""
+
+# Example 10: Dynamic World Info
+# fake-players:
+#   enabled: true
+#   players:
+#     - "<gradient:#228B22:#98FB98>🌍 World Info 🌍</gradient>"
+#     - ""
+#     - "<gray>Your World: <aqua>{world}</aqua></gray>"
+#     - "<gray>Time: %player_world_time%</gray>"
+#     - "<gray>Weather: %player_world_weather%</gray>"
+#     - ""
+#     - "<gradient:#4ECDC4:#45B7D1>Players Here: %world_players%</gradient>"
+#     - ""
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TIPS FOR FAKE PLAYERS
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 1. Keep lines under 16 characters for best display
+# 2. Use empty strings ("") for spacing between sections
+# 3. Combine with PlaceholderAPI for dynamic content
+# 4. Use MiniMessage for beautiful colors and gradients
+# 5. Set priority to control sorting (1000 = top, 0 = bottom)
+# 6. Enable show-to-all: true to show to everyone
+# 7. Use fake players for: stats, info, ads, rules, links
+# 8. Update interval affects fake player updates too
+# 9. Too many fake players may clutter the list
+# 10. Test different layouts to find what works best
+# ═══════════════════════════════════════════════════════════════════════════
+
